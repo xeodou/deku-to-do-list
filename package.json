@@ -1,0 +1,30 @@
+{
+  "name": "deku-todo",
+  "version": "1.0.0",
+  "description": "A to do example using deku library",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test",
+    "build": "./node_modules/.bin/browserify -t babelify index.js > build.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:xeodou/deku-to-do-list.git"
+  },
+  "keywords": [
+    "to",
+    "do",
+    "list",
+    "deku"
+  ],
+  "author": "xeodou@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xeodou/deku-to-do-list/issues"
+  },
+  "homepage": "https://github.com/xeodou/deku-to-do-list",
+  "devDependencies": {
+    "babelify": "^6.1.0",
+    "browserify": "^10.1.3"
+  }
+}
