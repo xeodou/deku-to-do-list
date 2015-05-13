@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "npm test",
-    "build": "./node_modules/.bin/browserify -t babelify index.js > build.js"
+    "build": "./node_modules/.bin/browserify -t babelify index.js > build.js",
+    "dist": "rm -rf dist &&  mkdir dist && cp index.html dist/ && cp build.js dist",
+    "deploy": "npm run dist && ./node_modules/.bin/gh-pages --dist dist"
   },
   "repository": {
     "type": "git",
@@ -25,6 +27,8 @@
   "homepage": "https://github.com/xeodou/deku-to-do-list",
   "devDependencies": {
     "babelify": "^6.1.0",
-    "browserify": "^10.1.3"
+    "browserify": "^10.1.3",
+    "deku": "^0.2.17",
+    "gh-pages": "^0.3.0"
   }
 }
