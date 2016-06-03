@@ -5,55 +5,45 @@
 */
 
 /** @jsx element */
-import {tree,render,renderString, element} from 'deku'
+import {createApp, element} from 'deku'
 
 let Todo = {
-
-  name: 'Todo',
-
   propTypes: {
     item: {
       type: 'string'
-    },
-    remove: {
-      source: 'removeTodo'
     }
   },
 
-  render(c) {
-    let {props} = c
-    let {item, remove} = props
+  render({ props, dispatch }) {
+    let {item} = props
 
-    function onRemove() {
-      remove(item)
+    let onRemove = (data, event) => {
+      dispatch({
+        type: 'REMOVE',
+        data: data
+      })
     }
-
     return (
       <div>
         {item}
-        <a href='javascript:;' onClick={onRemove}>Remove</a>
+        <a href='javascript:' onClick={onRemove.bind(null, item)}>Remove</a>
       </div>
     )
   }
 }
 
 let Add = {
-
   name: 'Add',
 
-  propTypes: {
-    add : {
-      source : "addTodo"
-    }
-  },
-
-  render (c) {
-    let {props} = c
+  render ({ props, dispatch }) {
     let {add} = props
 
     function onAdd(e) {
       if(e != null && e.keyCode == 13) {
-        add(e.target.value)
+        dispatch({
+          type: 'ADD',
+          data: e.target.value
+        })
         e.target.value = ''
       }
     }
@@ -64,9 +54,6 @@ let Add = {
 }
 
 let List = {
-
-  name: 'list',
-
   defaultProps: {
     items: []
   },
@@ -77,9 +64,8 @@ let List = {
     }
   },
 
-  render(c) {
-    let {props, state} = c
-    let children = items.map(function(i){
+  render({props}) {
+    let children = props.items.map(function(i){
       return <Todo item={i}/>
     })
     return (
@@ -93,22 +79,18 @@ let List = {
 
 let items = []
 
-let app = tree(<List items={items}/>)
-
-app.set('removeTodo', function(v) {
-  items = items.filter(i => {
-    return i != v
-  })
-  app.mount(
-    <List items={items} />
-  )
+let render = createApp(document.body, action => {
+  switch (action.type) {
+    case 'REMOVE':
+      items = items.filter(i => {
+        return i != action.data
+      })
+      break
+    case 'ADD':
+      items.push(action.data)
+      break
+  }
+  render(<List items={items}/>)
 })
 
-app.set('addTodo', function(i) {
-  items.push(i)
-  app.mount(
-    <List items={items} />
-  )
-})
-
-render(app, document.body)
+render(<List items={items}/>)
